@@ -13,32 +13,37 @@ program.parse(process.argv);
 
 const argv = program.opts();
 
-function invokeAction({ action, id, name, email, phone }) {
+const invokeAction = async ({ action, id, name, email, phone }) => {
   switch (action) {
     case "list":
-      console.log("Contacts list:");
-      contacts.listContacts();
-      break;
+      // console.table("Contacts list: ");
+      // contacts.listContacts();
+      const allContacts = await contacts.getAllContacts();
+      return console.table(allContacts)
 
     case "get":
-      console.log(`Contact by ID: ${id}`);
-      contacts.getContactById(id);
-      break;
+      // console.log(`Contact by ID: ${id}`);
+      // contacts.getContactById(id);
+      const oneContact = await contacts.getContactById(id);
+      return console.table(oneContact);
 
     case "add":
-      console.log(
-        `Contact with name: ${name}, email: ${email}, phone: ${phone} added!`
-      );
-      contacts.addContact(name, email, phone);
-      break;
+      // console.log(
+      //   `Contact with name: ${name}, email: ${email}, phone: ${phone} added!`
+      // );
+      // contacts.addContact(name, email, phone);
+      const newContact = await contacts.addContact({name, email, phone});
+      return console.table(newContact);
 
     case "remove":
-      console.log(`Contact by ID removed: ${id}`);
-      contacts.removeContact(id);
-      break;
+      // console.log(`Contact by ID removed: ${id}`);
+      // contacts.removeContact(id);
+      const removedContact = await contacts.removeContact(id);
+      return console.table(removedContact);
+           
 
     default:
-      console.warn("\x1B[31m Unknown action type!");
+      console.log("UNKNOWN ACTION TYPE!");
   }
 }
 
